@@ -1,0 +1,68 @@
+h1 {
+    text-align: center; 
+    font-family: Arial, Helvetica, sans-serif; 
+    font-weight: bold;
+    font-size: 40px;
+}
+#navbar {
+    text-align: right;
+    margin: 30px;
+}
+header a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    padding: 11px;
+    color: black;
+}
+#about {
+    padding-left: 30%;
+    /* padding-right: 25%; */
+}
+#about p {
+    text-align: justify;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    /* background-color: aqua; */
+
+}
+#streweak {
+    text-align: left;
+    padding-left: 400px;
+}
+#strength {
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#strength h2 {
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+}
+table {
+    margin-left: 1%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    border: 1px solid black;
+    padding: 8px;
+}
+th {
+    text-align: center;
+    background-color: aqua;
+    border: 1px solid black;
+}
+#contactForm {
+    margin-left: 40%;
+    /* padding: ; */
+}
+input[text] {
+    padding: 10%;
+}
+#footer a {
+    padding-left: 20px; 
+    padding-right: 20px;
+}
