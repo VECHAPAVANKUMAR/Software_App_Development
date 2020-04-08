@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Me</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header">
+        <div id="navbar">
+            <a href="./index.html">Home</a> 
+            <a href="./AboutMe.html">About Me</a> 
+            <a href="./Education.html">Education</a>
+            <a href="./ContactMe.html">Contact Me</a>
+        </div>
+    </header>
+
+    <h2 style="text-align: center;">Contact Me</h2>
+
+    <form action="" id="contactForm">
+        First Name : <input type="text" placeholder="First Name" name="fname"  required/><br><br>
+        Last Name : <input type="text" placeholder="Last Name" name="lname" required/><br><br>
+        Mobile Number : <input type="tel" name="telphone" placeholder="0000000000" 
+                        pattern="[0-9]{10}" maxlength="12"  title="Ten digits required" required/><br><br>
+        Submit : <input type="submit" placeholder="Submit">
+    </form>
+</body>
+</html>
