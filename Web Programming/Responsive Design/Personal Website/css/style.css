@@ -1,0 +1,22 @@
+html, body {
+    height: 100%;
+}
+#page-content {
+    flex: 1 0 auto;
+}
+#contact-info p {
+    margin-top: 10px;
+    margin-left: 25.5%;
+}
+input[type="text"] {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.icons a img {
+    height: 100px;
+}
+@media (max-width : 399px) {
+    .body {
+        margin-left: 50px;
+    }
+}
