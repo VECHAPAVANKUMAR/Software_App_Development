@@ -42,4 +42,19 @@ input[type="text"] {
     font-weight: bold;
     padding-top: 2px;
   }
+  input[type="text"] {
+    background-color: aqua;
+  }
+  nav > a {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+
+  nav ul li a {
+    font-size: medium;
+  }
+}
+@media (min-width : 398px) {
+  table {
+    display: none;
+  }
 }
