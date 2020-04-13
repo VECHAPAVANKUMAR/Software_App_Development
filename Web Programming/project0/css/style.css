@@ -53,8 +53,3 @@ input[type="text"] {
     font-size: medium;
   }
 }
-@media (min-width : 398px) {
-  table {
-    display: none;
-  }
-}
