@@ -1,0 +1,1 @@
+Entire process took me around thirty minutes to complete. I have faced only one issue while I run the flask application. The issue is that there is no module werkzeug. I installed that module and I runned my application and now it works and displayed the content that is available in application file.
