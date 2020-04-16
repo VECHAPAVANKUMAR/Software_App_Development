@@ -11,6 +11,7 @@
     <title>Register</title>
 
     <style>
+
         .input-group-prepend {
             width: 100%;
             padding-left: 10px;
@@ -20,116 +21,148 @@
         .registrationForm label {
             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
             font-size: large;
-            padding-left: 10px;
+            padding-top: 0;
+            padding-left: 8px;
         }
 
-        input[type="radio"] {
-            margin: 0 10px 0 12px;
+        input[type='radio'] {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 1px solid black;
+            border-radius: 50%;
+            outline: none;
+            background-color: white;
+            margin: 10px 10px 0 12px;
         }
-    </style>
+
+        input[type='radio']:hover {
+            border: 3px solid black;
+        }
+
+        input[type='radio']:before {
+            content: '';
+            display: block;
+            width: 60%;
+            height: 60%;
+            margin: 20% auto;
+            border-radius: 50%;
+        }
+
+        input[type='radio']:checked:before {
+            background: black;
+        }
+
+        input[type="text"], input[type="password"], input[type="email"], input[type="date"] {
+            border: 1px solid grey;
+        }
+
+</style>
 
 </head>
 
-<body style="background-color: pink;">
+<body style="background-color: white;">
 
     <div class="container">
 
-        <div class="row justify-content-center" style="margin-top: 4%;">
+        <div class="row justify-content-center" style="margin-top: 1.5%;">
 
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
-                <h2 style="text-align: center;"> Sign Up </h1>
+                <legend style="text-align: center;">Sign Up</legend>
 
-                    <form action="/profile" class="registrationForm" method="POST">
+                <form action="/profile" class="registrationForm" method="POST">
 
-                        <label for="name">Name</label>
+                    <label for="name">Name</label>
 
-                        <div class="input-group mb-3">
+                    <div class="input-group mb-3">
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"
-                                        aria-hidden="true"></i></span>
-                                <input type="text" placeholder="User Name" name="name" class="form-control"
-                                    aria-label="Username" aria-describedby="basic-addon1">
-                            </div>
-
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"
+                                    aria-hidden="true"></i></span>
+                            <input type="text" placeholder="User Name" name="name" class="form-control"
+                                aria-label="Username" aria-describedby="basic-addon1">
                         </div>
 
-                        <label for="email">Email Address</label><br>
+                    </div>
 
-                        <div class="input-group mb-3">
+                    <label for="email">Email Address</label><br>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope"
-                                        aria-hidden="true"></i></span>
-                                <input type="email" class="form-control" name="emailID" placeholder="Email"
-                                    maxlength="50" required><br>
-                            </div>
+                    <div class="input-group mb-3">
 
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope"
+                                    aria-hidden="true"></i></span>
+                            <input type="email" class="form-control" name="emailID" placeholder="Email" maxlength="50"
+                                required><br>
                         </div>
 
-                        <label for="pwd">Password</label><br>
+                    </div>
 
-                        <div class="input-group mb-3">
+                    <label for="pwd">Password</label><br>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"
-                                        aria-hidden="true"></i></i></span>
-                                <input type="password" name="pwd" placeholder="Password" class="form-control"
-                                    pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,16}$"
-                                    title="Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character"
-                                    required><br>
-                            </div>
+                    <div class="input-group mb-3">
 
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"
+                                    aria-hidden="true"></i></i></span>
+                            <input type="password" name="pwd" placeholder="Password" class="form-control"
+                                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,16}$"
+                                title="Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character"
+                                required><br>
                         </div>
 
-                        <label for="conformPassword">Confirm Password</label><br>
+                    </div>
 
-                        <div class="input-group mb-3">
+                    <label for="conformPassword">Confirm Password</label><br>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"
-                                        aria-hidden="true"></i></span>
-                                <input type="password" id="ucpwd" name="cpwd" placeholder="Password"
-                                    pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,16}$"
-                                    class="form-control"
-                                    title="Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character"
-                                    required><br>
-                            </div>
+                    <div class="input-group mb-3">
 
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"
+                                    aria-hidden="true"></i></span>
+                            <input type="password" id="ucpwd" name="cpwd" placeholder="Password"
+                                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,16}$" class="form-control"
+                                title="Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character"
+                                required><br>
                         </div>
 
-                        <label for="db">Date Of Birth</label><br>
+                    </div>
 
-                        <div class="input-group mb-3">
+                    <label for="db">Date Of Birth</label><br>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
-                                        aria-hidden="true"></i></span>
-                                <input type="date" id="dateOfBirth" name="dob" class="form-control">
-                            </div>
+                    <div class="input-group mb-3">
 
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
+                                    aria-hidden="true"></i></span>
+                            <input type="date" id="dateOfBirth" name="dob" class="form-control">
                         </div>
 
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    </div>
 
-                            <label for="gen">Gender</label>
-                           
-                            <input type="radio" name="options" id="male" value="Male" required>
-                            <label>Male</label></input>
-                           
-                            <input type="radio" name="options" id="female" value="Female" required>
-                            <label>Female</label></input>
-                           
-                            <input type="radio" name="options" id="other" value="Other" required>
-                            <label>Other</label></input>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                        </div>
+                        <label for="gen">Gender</label>
 
-                        <div style="padding-top: 10px;">
-                            <button type="submit" class="btn btn-primary" style="width: 150px;">Sign Up</button>
-                        </div>
-                    </form>
+                        <input type="radio" name="options" id="male" value="Male" required
+                            style="height: 18px; width: 18px;">
+                        <label>Male</label></input>
+
+                        <input type="radio" name="options" id="female" value="Female" required
+                            style="height: 18px; width: 18px;">
+                        <label>Female</label></input>
+
+                        <input type="radio" name="options" id="other" value="Other" required
+                            style="height: 18px; width: 18px;">
+                        <label>Other</label></input>
+
+                    </div>
+
+                    <div style="padding-top: 5px;">
+                        <button type="submit" class="btn btn-primary" style="width: 150px;">Sign Up</button>
+                    </div>
+                </form>
 
             </div>
 
