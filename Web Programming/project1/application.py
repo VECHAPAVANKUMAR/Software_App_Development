@@ -44,12 +44,8 @@ def profile() :
     dateOfBirth = request.form.get("dob")
     user_details.append(dateOfBirth)
     
-    if request.form.get("male") == "on" :
-        user_details.append("Male")
-    elif request.form.get("female") == "on" :
-        user_details.append("Female")
-    else :
-        user_details.append("Other")
+    gender = request.form["options"]
+    user_details.append(gender)
         
     if request.method == "GET" :
         return render_template("register1.html")

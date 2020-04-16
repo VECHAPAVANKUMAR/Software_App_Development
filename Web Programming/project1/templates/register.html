@@ -23,8 +23,8 @@
             padding-left: 10px;
         }
 
-        label {
-            margin-right: 20px;
+        input[type="radio"] {
+            margin: 0 10px 0 12px;
         }
     </style>
 
@@ -111,25 +111,24 @@
 
                         </div>
 
-                        <label for="gen">Gender</label><br>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                        <div class="custom-control custom-radio custom-control-inline">
-                            
-                            <input type="radio" class="custom-control-input form-control" id="male" name="gender">
-                            <label class="custom-control-label" for="male" style="padding-right: 15px;">Male</label>
-                            
-                            <input type="radio" class="custom-control-input form-control" id="female" name="gender">
-                            <label class="custom-control-label" for="female" style="padding-right: 15px;">Female</label>
-                            
-                            <input type="radio" class="custom-control-input form-control" id="other" name="gender">
-                            <label class="custom-control-label" for="other">Other</label>
+                            <label for="gen">Gender</label>
+                           
+                            <input type="radio" name="options" id="male" value="Male" required>
+                            <label>Male</label></input>
+                           
+                            <input type="radio" name="options" id="female" value="Female" required>
+                            <label>Female</label></input>
+                           
+                            <input type="radio" name="options" id="other" value="Other" required>
+                            <label>Other</label></input>
 
                         </div>
 
                         <div style="padding-top: 10px;">
                             <button type="submit" class="btn btn-primary" style="width: 150px;">Sign Up</button>
                         </div>
-
                     </form>
 
             </div>
