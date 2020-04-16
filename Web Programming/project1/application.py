@@ -33,23 +33,27 @@ def index() :
 @app.route("/profile", methods=["GET","POST"])
 def profile() :
 
-    user_details = []
-
-    name = request.form.get("name")
-    user_details.append(name)
-
-    emailID = request.form.get("emailID")
-    user_details.append(emailID)
-
-    dateOfBirth = request.form.get("dob")
-    user_details.append(dateOfBirth)
-    
-    gender = request.form["options"]
-    user_details.append(gender)
-        
+ 
     if request.method == "GET" :
-        return render_template("register1.html")
+        
+        return render_template("register.html")
+
     if request.method == "POST" :
+
+        user_details = []
+
+        name = request.form.get("name")
+        user_details.append(name)
+
+        emailID = request.form.get("emailID")
+        user_details.append(emailID)
+
+        dateOfBirth = request.form.get("dob")
+        user_details.append(dateOfBirth)
+        
+        gender = request.form["options"]
+        user_details.append(gender)
+
         return render_template("profile.html", user_details=user_details)
 
 if __name__ == "__main__" :
