@@ -19,14 +19,31 @@
 
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
+                {% if name %}
+
                 <div class="alert alert-success" role="alert" style="text-align: center;">
+
                     Registered Sucessfully!
+
+                    {% endif %}
+
                 </div>
 
-                <b>Name : </b> {{ user_details[0] }} <br>
-                <b>Email ID : </b> {{ user_details[1] }} <br>
-                <b>Date of Birth : </b> {{ user_details[2] }} <br>
-                <b>Gender : </b> {{ user_details[3] }}
+                {% if name %}
+                    <b>Name : </b> {{ name }} <br>
+                {% endif %}
+
+                {% if email %}
+                    <b>Email ID : </b> {{ email }} <br>
+                {% endif %}
+
+                {% if dob %}
+                    <b>Date of Birth : </b> {{ dob }} <br>
+                {% endif %}
+
+                {% if gender %}
+                    <b>Gender : </b> {{ gender }}
+                {% endif %}
 
             </div>
 
