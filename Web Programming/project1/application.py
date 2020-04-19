@@ -9,11 +9,9 @@ from datetime import timedelta
 
 app.secret_key = "1c488f4b4a21cd7fbc5007664656985c2459b2362cf1f88d44b97e750b0c14b2cf7bc7b792d3f45db"
 app.permanent_session_lifetime = timedelta(minutes=30)
-# @app.route("/")
-# def index():
-    # return "Project 1: TODO"
 
 @app.route("/")
+@app.route("/index")
 def index() :
     return render_template("index.html")
 
@@ -100,7 +98,6 @@ def authenticate() :
         else :
             flash("Please create an Account", "info")
             return redirect('register')
-
     else :
         
         if  session.get("user_email") :
