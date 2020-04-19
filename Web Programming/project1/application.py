@@ -5,8 +5,10 @@ from flask_session import Session
 from sqlalchemy.orm import scoped_session, sessionmaker
 from models import *
 from create import app
+from datetime import timedelta
 
 app.secret_key = "1c488f4b4a21cd7fbc5007664656985c2459b2362cf1f88d44b97e750b0c14b2cf7bc7b792d3f45db"
+app.permanent_session_lifetime = timedelta(minutes=30)
 # @app.route("/")
 # def index():
     # return "Project 1: TODO"
@@ -89,6 +91,7 @@ def authenticate() :
 
             if stored_password == pwdhash :
                 session["user_email"] = user.email
+                session.permanent=True
                 flash("Login Succesful !", "info")
                 return redirect("user")
             else :
@@ -130,8 +133,12 @@ def user() :
 
 @app.route("/admin")
 def admin() :
-    users = User.query.order_by(User.timestamp.desc()).all()
-    return render_template("admin.html", users=users)
+    if session.get("user_email") :
+        users = User.query.order_by(User.timestamp.desc()).all()
+        return render_template("admin.html", users=users)
+    else :
+        flash("Please Login First", "info")
+        return redirect("/login")
 
 if __name__ == "__main__" :
     app.run(debug=True)
