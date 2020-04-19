@@ -38,3 +38,7 @@ class Book(db.Model) :
         self.title = title
         self.author = author
         self.year = year
+
+    def __repr__(self) :
+
+        return "ISBN : " + self.isbn + " | Title : " + self.title + " | Author : " + self.author + " | Year : " + self.year

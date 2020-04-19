@@ -122,7 +122,8 @@ def user() :
     
     if session.get("user_email") :
         user_email = session["user_email"]
-        return render_template("user.html", user=user_email)
+        books = Book.query.all()
+        return render_template("user.html", user=user_email, books=books)
     else :
         flash("You are not logged in!")
         return redirect("login")

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <title>Title</title>
+    <title>Books</title>
     <style>
         #pop {
             text-align: center;
@@ -58,7 +58,28 @@
     {% endif %}
     {% endwith %}
 
-    <h1>Review On Books</h1>
+    <div class="container">
+        <br>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    {% for book in books %}
+                <tr>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.title}}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.year }}</td>
+                </tr>
+                {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
