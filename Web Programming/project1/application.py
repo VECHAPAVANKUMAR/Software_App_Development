@@ -1,11 +1,12 @@
 import hashlib, binascii, os
 
-from flask import Flask, session, request, render_template, flash, redirect
+from flask import Flask, session, request, render_template, flash, redirect, url_for
 from flask_session import Session
 from sqlalchemy.orm import scoped_session, sessionmaker
 from models import *
 from create import app
 from datetime import timedelta
+from sqlalchemy import or_
 
 app.secret_key = "1c488f4b4a21cd7fbc5007664656985c2459b2362cf1f88d44b97e750b0c14b2cf7bc7b792d3f45db"
 app.permanent_session_lifetime = timedelta(minutes=30)
@@ -64,7 +65,7 @@ def login() :
 
     if request.method == "GET" :
         if session.get("user_email") :
-            return redirect("user")
+            return redirect("search")
         else :
             return render_template("login.html")
     else :
@@ -91,7 +92,7 @@ def authenticate() :
                 session["user_email"] = user.email
                 session.permanent=True
                 flash("Login Succesful !", "info")
-                return redirect("user")
+                return redirect("/search")
             else :
                 flash("Please create an Account", "info")
                 return redirect('register')
@@ -102,7 +103,7 @@ def authenticate() :
         
         if  session.get("user_email") :
             flash("Already Logged in !", "info")
-            return redirect("user")
+            return redirect("/search")
 
         return render_template("login.html")
 
@@ -117,17 +118,62 @@ def logout() :
         flash("Please Login", "info")
         return redirect("login")
 
-@app.route("/user", methods=["GET", "POST"])
+@app.route("/results", methods=["GET", "POST"])
 def user() :
     
-    if session.get("user_email") :
-        user_email = session["user_email"]
-        books = Book.query.all()
-        return render_template("user.html", user=user_email, books=books)
-    else :
-        flash("You are not logged in!")
-        return redirect("login")
+    if request.method == "POST" : 
+            
+        if session.get("user_email") :
+            query = request.form.get("search_item")
+            query = "%{}%".format(query)
+            books = Book.query.filter(or_(Book.isbn.ilike(query), Book.title.ilike(query), Book.author.ilike(query), Book.year.like(query)))
+            session["query"] = query
+            try :
+                books[0].isbn
+                return render_template("results.html", books=books)
+            except Exception as exc :
+                flash("No Results Found")
+                return render_template("results.html", books=books)
+        else :
+            flash("Please Login", "info")
+            return redirect(url_for("login"))
 
+    else :
+        if session.get("user_email") :
+            query = session.get("query")
+            books = Book.query.filter(or_(Book.isbn.like(query), Book.title.like(query), Book.author.like(query), Book.year.like(query)))
+            return render_template("results.html", books=books)
+        else :
+            flash("Please Login", "info")
+            return redirect(url_for("login"))
+
+@app.route("/search", methods=["GET", "POST"])
+def search() :
+    
+    if request.method == "GET" :
+    
+        if session.get("user_email") :
+            return render_template("search.html")
+        else :
+            flash("Pleae Login", "info")
+            return redirect("/login")
+    if request.method == "POST" :
+        return "POST"
+
+@app.route("/book/<string:isbn>", methods=["GET", "POST"])
+def bookpage(isbn) :
+
+    if request.method == "GET" :
+        if session.get("user_email") :
+            return render_template("reviews.html", isbn=isbn)
+        else :
+            redirect(url_for("login"))
+    else :
+        if session.get("user_email") :
+            return isbn
+        else :
+            redirect(url_for("login"))
+    
 @app.route("/admin")
 def admin() :
     if session.get("user_email") :
