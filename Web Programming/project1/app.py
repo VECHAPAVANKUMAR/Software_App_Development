@@ -175,14 +175,12 @@ def bookpage(isbn) :
             db.session.add(reviewobj)
             db.session.commit()
             print("inserted into db")
-            existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-
+            existing_reviews = Reviews.query.filter_by(isbn =isbn).all()
             book_details = Book.query.get(isbn)
             return render_template("bookpage.html",details = existing_reviews , book = book_details)
         else:
             flash("You already reviewed this book again !")
-            existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-
+            existing_reviews = Reviews.query.filter_by(isbn =isbn).all()
             book_details = Book.query.get(isbn)
             return render_template("bookpage.html",details = existing_reviews , book = book_details)
 
@@ -193,12 +191,11 @@ def bookpage(isbn) :
             render_template("login.html")
         else:
             book_details = Book.query.get(isbn)
-            existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-            print(existing_reviews)
-
+            existing_reviews = Reviews.query.filter_by(isbn =isbn).all()
             print(existing_reviews)
             print(book_details)
             return render_template("bookpage.html",details = existing_reviews , book = book_details)
+
 
 
 @app.route("/admin")
