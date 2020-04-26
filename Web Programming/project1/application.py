@@ -159,8 +159,9 @@ def search() :
             flash("Pleae Login", "info")
             return redirect("/login")
     if request.method == "POST" :
-        return "POST"
-
+        return "POSTMETHODNOTALLOWED"
+    
+#---------------------------------------------------DONE BY SAHITHI VADLA-------------------------------------------------------------#
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def bookpage(isbn) :
     if request.method == "POST":
