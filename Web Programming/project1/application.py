@@ -205,7 +205,7 @@ def bookpage(isbn) :
 #                 existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
 #                 return render_template("bookpage.html",details = existing_reviews , book = book_details)
 #             else:
-                flash("You already reviewed this book !")
+#                 flash("You already reviewed this book !")
                 
                 
 
