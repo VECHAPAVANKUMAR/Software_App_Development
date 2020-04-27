@@ -120,7 +120,7 @@ def logout() :
         return redirect("login")
 
 @app.route("/results", methods=["GET", "POST"])
-def results() :
+def user() :
 
     if request.method == "POST" :
 
@@ -148,60 +148,56 @@ def results() :
             flash("Please Login", "info")
             return redirect(url_for("login"))
 
-@app.route("/search", methods=["GET"])
+@app.route("/search", methods=["GET", "POST"])
 def search() :
-    
+
     if request.method == "GET" :
-    
+
         if session.get("user_email") :
             return render_template("search.html")
         else :
             flash("Pleae Login", "info")
             return redirect("/login")
-  
+    if request.method == "POST" :
+        return "POST"
+
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def bookpage(isbn) :
     if request.method == "POST":
-        # we have to check whether the user is logged in here also because he might give the rating, comments in the url itself 
-        if session.get("user_email"):
-            comments = request.form.get('textarea')
-            rating = request.form.get('star')
-            print(comments)
-            print(rating)
-            #now check if the reviewer has already commented
-            if rating is None:
-                rating=0
-            review_data = Reviews.query.filter(and_(Reviews.isbn == isbn ,Reviews.emailid == session.get("user_email"))).first()
-            if review_data is None:
-                reviewobj = Reviews(isbn = isbn,emailid=session.get('user_email'),rating=rating,comments=comments)
-                db.session.add(reviewobj)
-                db.session.commit()
-                print("inserted into db")
-                existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-                book_details = Book.query.get(isbn)
-                return render_template("bookpage.html",details = existing_reviews , book = book_details)
-            else:
-                flash("You already reviewed this book  !")
-                existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-                book_details = Book.query.get(isbn)
-                return render_template("bookpage.html",details = existing_reviews , book = book_details)
+        comments = request.form['textarea']
+        rating = request.form['star']
+        print(comments)
+        print(rating)
+        #now check if the reviewer has already commented
+        review_data = Reviews.query.filter(and_(Reviews.isbn == isbn ,Reviews.emailid == session["user_email"])).first()
+        if review_data is None:
+            reviewobj = Reviews(isbn = isbn,emailid=session['user_email'],rating=rating,comments=comments)
+            db.session.add(reviewobj)
+            db.session.commit()
+            print("inserted into db")
+            existing_reviews = Reviews.query.filter_by(isbn =isbn).all()
+            book_details = Book.query.get(isbn)
+            return render_template("bookpage.html",details = existing_reviews , book = book_details)
         else:
-            flash("You cannot view this page unless you login!")
-            return redirect(url_for("login"))
-            
+            flash("You already reviewed this book again !")
+            existing_reviews = Reviews.query.filter_by(isbn =isbn).all()
+            book_details = Book.query.get(isbn)
+            return render_template("bookpage.html",details = existing_reviews , book = book_details)
+
     elif request.method == "GET":
         # print("you are in the get method")
-        if session.get('user_email') is  None:
+        if session['user_email'] is  None:
             flash("You cannot view this page unless you login!")
-            return redirect(url_for("login"))
+            render_template("login.html")
         else:
-            review_data = Reviews.query.filter(and_(Reviews.isbn == isbn ,Reviews.emailid == session.get("user_email"))).first()
-            if review_data is not None:
-                 flash("You already reviewed this book !")
             book_details = Book.query.get(isbn)
-            existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
+            existing_reviews = Reviews.query.filter_by(isbn =isbn).all()
+            print(existing_reviews)
+            print(book_details)
             return render_template("bookpage.html",details = existing_reviews , book = book_details)
-    
+
+
+
 @app.route("/admin")
 def admin() :
     if session.get("user_email") :
