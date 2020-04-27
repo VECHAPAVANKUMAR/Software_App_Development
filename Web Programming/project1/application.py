@@ -120,7 +120,7 @@ def logout() :
         return redirect("login")
 
 @app.route("/results", methods=["GET", "POST"])
-def user() :
+def results() :
 
     if request.method == "POST" :
 
@@ -148,20 +148,17 @@ def user() :
             flash("Please Login", "info")
             return redirect(url_for("login"))
 
-@app.route("/search", methods=["GET", "POST"])
+@app.route("/search", methods=["GET"])
 def search() :
-
+    
     if request.method == "GET" :
-
+    
         if session.get("user_email") :
             return render_template("search.html")
         else :
             flash("Pleae Login", "info")
             return redirect("/login")
-    if request.method == "POST" :
-        return "POSTMETHODNOTALLOWED"
-    
-#---------------------------------------------------DONE BY SAHITHI VADLA-------------------------------------------------------------#
+  
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def bookpage(isbn) :
     if request.method == "POST":
@@ -204,18 +201,7 @@ def bookpage(isbn) :
             book_details = Book.query.get(isbn)
             existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
             return render_template("bookpage.html",details = existing_reviews , book = book_details)
-#             else:        
-                    
-                
-#                 book_details = Book.query.get(isbn)
-#                 existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-#                 return render_template("bookpage.html",details = existing_reviews , book = book_details)
-#             else:
-#                 flash("You already reviewed this book !")
-                
-                
-
-
+    
 @app.route("/admin")
 def admin() :
     if session.get("user_email") :
