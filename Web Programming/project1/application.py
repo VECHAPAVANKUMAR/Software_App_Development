@@ -59,7 +59,7 @@ def profile() :
 
         except Exception as exc:
             flash("An Account with same Email id alresdy exists", "info")
-            return redirect("register")
+            return redirect(url_for("register"))
 
 @app.route("/login", methods=["GET", "POST"])
 def login() :
@@ -119,20 +119,17 @@ def logout() :
         flash("Please Login", "info")
         return redirect("login")
 
-@app.route("/search", methods=["GET"])
+@app.route("/search", methods=["GET", "POST"])
 def search() :
     
     if request.method == "GET" :
     
         if session.get("user_email") :
-            return render_template("userHome.html")
+            return render_template("search.html")
         else :
             flash("Pleae Login", "info")
             return redirect("/login")
-
-@app.route("/results", methods=["GET", "POST"])
-def results() :
-
+    
     if request.method == "POST" :
 
         if session.get("user_email") :
@@ -142,23 +139,23 @@ def results() :
             session["query"] = query
             try :
                 books[0].isbn
-                return render_template("results.html", books=books)
-            except Exception as exc :
+                return render_template("search.html", books=books)
+            except Exception :
                 flash("No Results Found")
-                return render_template("results.html", books=books)
+                return render_template("search.html", books=books)
         else :
             flash("Please Login", "info")
             return redirect(url_for("login"))
 
     else :
+
         if session.get("user_email") :
             query = session.get("query")
             books = Book.query.filter(or_(Book.isbn.like(query), Book.title.like(query), Book.author.like(query), Book.year.like(query)))
-            return render_template("results.html", books=books)
+            return render_template("search.html", books=books)
         else :
             flash("Please Login", "info")
             return redirect(url_for("login"))
-
 
 @app.route("/api/search", methods=["POST"])
 def searchAPI() :
@@ -263,7 +260,7 @@ def bookpage(isbn) :
             book_details = Book.query.get(isbn)
             existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
 
-            return render_template("bookpage.html",details = existing_reviews , book = book_details)
+            return render_template("bookpage.html", details=existing_reviews , book=book_details)
     
 @app.route("/admin")
 def admin() :

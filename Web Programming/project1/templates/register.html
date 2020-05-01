@@ -8,7 +8,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
     <title>Register</title>
 
     <style>
@@ -74,6 +73,163 @@
             text-align: center;
         }
     </style>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            document.querySelector('#form').onsubmit = () => {
+
+                let flag = true;
+
+                const name = document.querySelector("#name").value;
+
+                if (name.length == 0) {
+
+                    document.querySelector("#name-error").style.color = "red";
+                    document.querySelector("#name-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#name-error").innerHTML = "user name should not be empty <br>";
+                    flage = false
+
+                } else if  (name.length > 50) {
+
+                    document.querySelector("#name-error").style.color = "red";
+                    document.querySelector("#name-error").padding = "0 0 0 8px";
+                    document.querySelector("#name-error").innerHTML = "user name should not contain more than 50 characters <br>";
+                    flag = false
+
+                }
+
+                const email = document.querySelector("#email").value;
+
+                if (email.length == 0) {
+
+                    document.querySelector("#email-error").style.color = "red";
+                    document.querySelector("#email-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#email-error").innerHTML = "email id is required <br>";
+                    flag = false
+
+                } else if (email.length > 50) {
+
+                    document.querySelector("#email-error").style.color = "red";
+                    document.querySelector("#email-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#email-error").innerHTML = "email id should not contain more than 50 characters <br>";
+                    flag = false
+
+                }
+
+                const password = document.querySelector("#pwd").value;
+
+                let regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,15})");
+
+                if (password.length == 0) {
+
+                    document.querySelector("#pwd-error").style.color = "red";
+                    document.querySelector("#pwd-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#pwd-error").innerHTML = "Password should not be empty <br>";
+                    flag = false
+
+                } else if (!regex.test(password)) {
+
+                    document.querySelector("#pwd-error").style.color = "red";
+                    document.querySelector("#pwd-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#pwd-error").innerHTML = "Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character <br>";
+                    flag = false
+
+                }
+
+                const conformPassword = document.querySelector("#cpwd").value;
+
+                if (conformPassword.length == 0) {
+                    
+                    document.querySelector("#cpwd-error").style.color = "red";
+                    document.querySelector("#cpwd-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#cpwd-error").innerHTML = "Password should not be empty <br>";
+                    flag = false
+
+                } else if (!regex.test(conformPassword)) {
+
+                    document.querySelector("#cpwd-error").style.color = "red";
+                    document.querySelector("#cpwd-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#cpwd-error").innerHTML = "Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character <br>";
+                    flag = false
+
+                }
+
+                if (password !== conformPassword) {
+
+                    document.querySelector("#cpwd-error").style.color = "red";
+                    document.querySelector("#cpwd-error").style.padding = "0 0 0 8px"
+                    document.querySelector("#cpwd-error").innerHTML = "Password and Conformation Password should match <br>";
+                    flag = false
+
+                }
+
+                const date_of_birth = document.querySelector("#dateOfBirth").value
+
+                if (date_of_birth.length == 0) {
+
+                    document.querySelector("#dob-error").style.color = "red";
+                    document.querySelector("#dob-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#dob-error").innerHTML = "Date of Birth should not leave empty <br>";
+                    flag = false
+
+                }
+
+                let count = 0;
+
+                document.querySelectorAll('.gen').forEach((radio) => {
+
+                    if (!radio.checked) {
+                        count++;
+                    };
+
+                });
+
+                if (count == 3) {
+
+                    document.querySelector("#gen-error").style.color = "red";
+                    document.querySelector("#gen-error").style.padding = "0 0 0 8px";
+                    document.querySelector("#gen-error").innerHTML = "Please choose any of the above three options <br> <br>";
+                    flag = false
+
+                }
+
+                return flag;
+
+            }
+
+            document.querySelector("#name").onkeyup = () => {
+                document.querySelector("#name-error").innerHTML = "";
+            }
+
+            document.querySelector("#email").onkeyup = () => {
+                document.querySelector("#email-error").innerHTML = "";
+            }
+
+            document.querySelector("#pwd").onkeyup = () => {
+                document.querySelector("#pwd-error").innerHTML = "";
+            }
+
+            document.querySelector("#cpwd").onkeyup = () => {
+                document.querySelector("#cpwd-error").innerHTML = "";
+            }
+
+            document.querySelector("#dateOfBirth").onkeyup = () => {
+                document.querySelector("#dob-error").innerHTML = "";
+            }
+
+            document.querySelectorAll('.gen').forEach((radio) => {
+                radio.onchange = function() {
+                    if (radio.checked) {
+                        document.querySelector("#gen-error").innerHTML = "";
+                    }
+                };
+            });
+        });
+
+    </script>
+
 </head>
 
 <header>
@@ -137,11 +293,13 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"
                                     aria-hidden="true"></i></span>
-                            <input type="text" placeholder="User Name" name="name" class="form-control"
-                                aria-label="Username" aria-describedby="basic-addon1" maxlength="50" required>
+                            <input type="text" placeholder="User Name" name="name" id = "name" class="form-control"
+                                aria-label="Username" aria-describedby="basic-addon1">
                         </div>
 
                     </div>
+
+                    <span id="name-error"></span>
 
                     <label for="email">Email Address</label><br>
 
@@ -150,11 +308,13 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope"
                                     aria-hidden="true"></i></span>
-                            <input type="email" class="form-control" name="emailID" placeholder="Email" maxlength="50"
-                                required><br>
+                            <input type="email" class="form-control" name="emailID" 
+                            id="email" placeholder="Email"><br>
                         </div>
 
                     </div>
+
+                    <span id="email-error"></span>
 
                     <label for="pwd">Password</label><br>
 
@@ -163,13 +323,12 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"
                                     aria-hidden="true"></i></i></span>
-                            <input type="password" name="pwd" placeholder="Password" class="form-control" id="pwd"
-                                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,16}$"
-                                title="Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character"
-                                required><br>
+                            <input type="password" name="pwd" placeholder="Password" class="form-control" id="pwd"><br>
                         </div>
 
                     </div>
+
+                    <span id="pwd-error"></span>
 
                     <label for="conformPassword">Confirm Password</label><br>
 
@@ -178,15 +337,12 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"
                                     aria-hidden="true"></i></span>
-                            <input type="password" id="cpwd" name="cpwd" placeholder="Password"
-                                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.*\s).{8,16}$" class="form-control"
-                                title="Password length should be in between 8 and 16 and it should include atleast one lowercase letter, one upper case letter, one digit and a special character"
-                                required><br>
+                            <input type="password" id="cpwd" name="cpwd" placeholder="Password" class="form-control"><br>
                         </div>
 
                     </div>
 
-                    <p><span id="error"></span></p>
+                    <span id="cpwd-error"></span>
 
                     <label for="db">Date Of Birth</label><br>
 
@@ -195,33 +351,36 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
                                     aria-hidden="true"></i></span>
-                            <input type="date" id="dateOfBirth" name="dob" class="form-control" required>
+                            <input type="date" id="dateOfBirth" name="dob" class="form-control">
                         </div>
 
                     </div>
 
+                    <span id="dob-error"></span>
+
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="gen">
 
-                        <label for="gen">Gender</label>
+                        <label for="gen">Gender</label><br>
 
-                        <input type="radio" name="options" id="male" value="Male" required
+                        <input type="radio" name="options" id="male" value="Male" class="gen"
                             style="height: 18px; width: 18px;">
                         <label>Male</label></input>
 
-                        <input type="radio" name="options" id="female" value="Female" required
+                        <input type="radio" name="options" id="female" value="Female" class="gen"
                             style="height: 18px; width: 18px;">
                         <label>Female</label></input>
 
-                        <input type="radio" name="options" id="other" value="Other" required
+                        <input type="radio" name="options" id="other" value="Other" class="gen"
                             style="height: 18px; width: 18px;">
                         <label>Other</label></input>
 
                     </div>
 
+                    <span id="gen-error"></span>
+
                     <div>
                         <button type="submit" class="btn btn-primary" style="width: 150px;">Sign Up</button>
                     </div>
-
                 </form>
 
             </div>
@@ -229,38 +388,6 @@
         </div>
 
     </div>
-
-    <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-            document.querySelector('#form').onsubmit = function () {
-
-                const password = document.querySelector("#pwd").value;
-                const conformPassword = document.querySelector("#cpwd").value;
-
-
-                if (password === conformPassword) {
-                    return true
-                } else {
-                    document.querySelector("#error").style.color = "red";
-                    document.querySelector("#error").style.padding = "0 0 0 8px"
-                    document.querySelector("#error").innerHTML = "Password and Conformation Password should match"
-                    return false
-                }
-            }
-
-            document.querySelector("#pwd").onkeyup = function() {
-                document.querySelector("#error").innerHTML = ""
-            }
-
-            document.querySelector("#cpwd").onkeyup = function() {
-                document.querySelector("#error").innerHTML = ""
-            }
-
-        });
-
-    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
