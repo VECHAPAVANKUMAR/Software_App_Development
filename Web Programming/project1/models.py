@@ -34,7 +34,7 @@ class Book(db.Model) :
     year = db.Column(db.String, nullable=False)
 
     def __init__(self, isbn, title, author, year) :
-        
+
         self.isbn = isbn
         self.title = title
         self.author = author
@@ -58,3 +58,10 @@ class Reviews(db.Model):
         self.rating = rating
         self.comments = comments
         self.timestamp = datetime.now()
+
+        #comment rating (useremailid isbn) => pkey
+
+
+
+
+
