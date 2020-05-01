@@ -1,6 +1,6 @@
 import hashlib, binascii, os
 
-from flask import Flask, session, request, render_template, flash, redirect, url_for
+from flask import Flask, session, request, render_template, flash, redirect, url_for, jsonify
 from flask_session import Session
 from sqlalchemy.orm import scoped_session, sessionmaker
 from models import *
@@ -118,6 +118,17 @@ def logout() :
         flash("Please Login", "info")
         return redirect("login")
 
+@app.route("/search", methods=["GET"])
+def search() :
+    
+    if request.method == "GET" :
+    
+        if session.get("user_email") :
+            return render_template("userHome.html")
+        else :
+            flash("Pleae Login", "info")
+            return redirect("/login")
+
 @app.route("/results", methods=["GET", "POST"])
 def user() :
     
@@ -147,32 +158,54 @@ def user() :
             flash("Please Login", "info")
             return redirect(url_for("login"))
 
-@app.route("/search", methods=["GET", "POST"])
-def search() :
-    
-    if request.method == "GET" :
-    
-        if session.get("user_email") :
-            return render_template("search.html")
-        else :
-            flash("Pleae Login", "info")
-            return redirect("/login")
-    if request.method == "POST" :
-        return "POST"
 
-@app.route("/book/<string:isbn>", methods=["GET", "POST"])
-def bookpage(isbn) :
+@app.route("/api/search", methods=["POST"])
+def searchAPI() :
+    
+    try :
 
-    if request.method == "GET" :
-        if session.get("user_email") :
-            return render_template("reviews.html", isbn=isbn)
-        else :
-            redirect(url_for("login"))
-    else :
-        if session.get("user_email") :
-            return isbn
-        else :
-            redirect(url_for("login"))
+        if (not request.is_json) :
+            return jsonify({"error" : "not a json request"}), 400
+
+        reqData = request.get_json()
+
+        if "search" not in reqData:
+            return jsonify({"error" : "missing search param"}), 400
+            
+        value = reqData.get("search")
+
+        if len(value) == 0 :
+            return jsonify({"error" : "no results found"}), 404
+
+        query = "%{}%".format(value)
+
+        books = Book.query.filter(or_(Book.isbn.ilike(query), Book.title.ilike(query), Book.author.ilike(query), Book.year.like(query)))
+
+        try :
+
+            books[0].isbn
+
+            results = []
+
+            for book in books :
+
+                temp = {}
+
+                temp["isbn"] = book.isbn
+                temp["title"] = book.title
+                temp["author"] = book.author
+                temp["year"] = book.isbn
+
+                results.append(temp)
+
+            return jsonify({"books" : results}), 200
+
+        except Exception as exc :
+
+            return jsonify({"error" : "Invalid Search Input"}), 404
+
+    except Exception :
+        return jsonify({"error" : "Server Error"})
     
 @app.route("/admin")
 def admin() :
