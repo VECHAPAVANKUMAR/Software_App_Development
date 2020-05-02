@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <title>Home</title>
     <style>
+        
         .input-group-prepend {
             width: 100%;
             font-size: medium;
@@ -24,16 +25,26 @@
         #pop {
             text-align: center;
         }
+
     </style>
  
     <script>
- 
- 
+  
         function search() {
  
             const request = new XMLHttpRequest();
             const value = document.querySelector('#search_item').value;
- 
+
+            if (value.length === 0) {
+
+                document.querySelector('#books').innerHTML = ""
+                document.querySelector('#load').style.color = "red";
+                document.querySelector('#load').innerHTML = "<br><b>You can't leave search bar empty<b>"
+                return;
+            }
+
+            document.querySelector('#load').style.color = "black";
+
             request.open("POST" , "/api/search")
             request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
  
@@ -73,14 +84,22 @@
  
                 } else if (request.status === 404) {
                     document.querySelector('#load').innerHTML = "<br><b>No Results found<b>";
-                } else if (request.status === 500) {
-                    document.querySelector('#load').innerHTML = "<br><b> Server Error<b>";
-                }                    
+                } else if (request.status === 400) {
+                    document.querySelector('#load').style.color = "red";
+                    document.querySelector('#load').innerHTML = "<br><b>Bad Request</b>"
+                } else {
+                    document.querySelector('#load').style.color = "red";
+                    document.querySelector('#load').innerHTML = "<br><b>Server Error<b>";
+                }                   
             }
  
             const jsonData = JSON.stringify({"search" : value})
             request.send(jsonData);
             return false;
+        }
+
+        function book(isbn) {
+            alert(isbn)
         }
          
     </script>
@@ -95,7 +114,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <button type="button" class="nav-link btn btn-dark" onclick="register()">Sign Up</button>
+                    <a class="nav-link" href="./">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
