@@ -182,7 +182,7 @@ def searchAPI() :
             return jsonify({"error" : "missing key email"}), 400
 
         email = reqData.get("email")
-        
+
         validEMail = User.query.get(email)
 
         if validEMail is None :
@@ -213,7 +213,7 @@ def searchAPI() :
 
         except Exception as exc :
 
-            return jsonify({"error" : "Invalid Search Input"}), 404
+            return jsonify({"error" : "no results found"}), 404
 
     except Exception :
         return jsonify({"error" : "Server Error"}), 500

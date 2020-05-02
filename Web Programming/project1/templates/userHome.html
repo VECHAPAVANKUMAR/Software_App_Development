@@ -55,7 +55,7 @@
             request.onload = () => {
                 
                 const response = JSON.parse(request.responseText);
- 
+                
                 if (request.status === 200) {
  
                     response.books.forEach(book => {
@@ -83,15 +83,10 @@
  
                 }); 
  
-                } else if (request.status === 404) {
-                    document.querySelector('#load').innerHTML = "<br><b>No Results found<b>";
-                } else if (request.status === 400) {
-                    document.querySelector('#load').style.color = "red";
-                    document.querySelector('#load').innerHTML = "<br><b>Bad Request</b>"
                 } else {
                     document.querySelector('#load').style.color = "red";
-                    document.querySelector('#load').innerHTML = "<br><b>Server Error<b>";
-                }                   
+                    document.querySelector('#load').innerHTML = "<br><b>" + response.error + "</b>";
+                }                 
             }
  
             const jsonData = JSON.stringify({"search" : value, "email" : email})
