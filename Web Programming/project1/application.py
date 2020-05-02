@@ -127,7 +127,8 @@ def search() :
     if request.method == "GET" :
     
         if session.get("user_email") :
-            return render_template("userHome.html")
+            email = session.get("user_email")
+            return render_template("userHome.html", email=email)
         else :
             flash("Pleae Login", "info")
             return redirect("/login")
@@ -177,6 +178,16 @@ def searchAPI() :
         if len(value) == 0 :
             return jsonify({"error" : "no results found"}), 404
 
+        if "email" not in reqData :
+            return jsonify({"error" : "missing key email"}), 400
+
+        email = reqData.get("email")
+        
+        validEMail = User.query.get(email)
+
+        if validEMail is None :
+            return jsonify({"error" : "not a registered email"}), 200
+        
         query = "%{}%".format(value)
 
         books = Book.query.filter(or_(Book.isbn.ilike(query), Book.title.ilike(query), Book.author.ilike(query), Book.year.like(query)))

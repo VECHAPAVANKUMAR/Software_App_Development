@@ -29,7 +29,9 @@
     </style>
  
     <script>
-  
+        
+        const email = "{{email}}"
+        
         function search() {
  
             const request = new XMLHttpRequest();
@@ -37,7 +39,6 @@
 
             if (value.length === 0) {
 
-                document.querySelector('#books').innerHTML = ""
                 document.querySelector('#load').style.color = "red";
                 document.querySelector('#load').innerHTML = "<br><b>You can't leave search bar empty<b>"
                 return;
@@ -93,7 +94,7 @@
                 }                   
             }
  
-            const jsonData = JSON.stringify({"search" : value})
+            const jsonData = JSON.stringify({"search" : value, "email" : email})
             request.send(jsonData);
             return false;
         }
@@ -144,7 +145,8 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
- 
+    
+    <span id="email" value={{email}}></span>
     <div class="container">
  
         <div class="row" style="margin-top: 5%;">
