@@ -30,11 +30,11 @@ def profile() :
 
     if request.method == "POST" :
 
-        name = request.form.get("name")
+        name = request.form.get("name").trim()
 
-        emailID = request.form.get("emailID")
+        emailID = request.form.get("emailID").trim()
 
-        password = request.form.get("pwd")
+        password = request.form.get("pwd").trim()
 
         dateOfBirth = request.form.get("dob")
 
@@ -58,7 +58,9 @@ def profile() :
             return render_template("profile.html", name=name, email=emailID, dob=dateOfBirth, gender=gender)
 
         except Exception as exc:
+
             flash("An Account with same Email id alresdy exists", "info")
+
             return redirect(url_for("register"))
 
 @app.route("/login", methods=["GET", "POST"])
@@ -125,7 +127,7 @@ def search() :
     if request.method == "GET" :
     
         if session.get("user_email") :
-            return render_template("search.html")
+            return render_template("userHome.html")
         else :
             flash("Pleae Login", "info")
             return redirect("/login")
@@ -139,10 +141,10 @@ def search() :
             session["query"] = query
             try :
                 books[0].isbn
-                return render_template("search.html", books=books)
+                return render_template("userHome.html", books=books)
             except Exception :
                 flash("No Results Found")
-                return render_template("search.html", books=books)
+                return render_template("userHome.html", books=books)
         else :
             flash("Please Login", "info")
             return redirect(url_for("login"))
@@ -152,7 +154,7 @@ def search() :
         if session.get("user_email") :
             query = session.get("query")
             books = Book.query.filter(or_(Book.isbn.like(query), Book.title.like(query), Book.author.like(query), Book.year.like(query)))
-            return render_template("search.html", books=books)
+            return render_template("userHome.html", books=books)
         else :
             flash("Please Login", "info")
             return redirect(url_for("login"))
