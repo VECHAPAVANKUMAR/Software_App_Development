@@ -150,19 +150,19 @@ def results() :
 
 @app.route("/search", methods=["GET"])
 def search() :
-    
+
     if request.method == "GET" :
-    
+
         if session.get("user_email") :
             return render_template("search.html")
         else :
             flash("Pleae Login", "info")
             return redirect("/login")
-  
+
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def bookpage(isbn) :
     if request.method == "POST":
-        # we have to check whether the user is logged in here also because he might give the rating, comments in the url itself 
+        # we have to check whether the user is logged in here also because he might give the rating, comments in the url itself
         if session.get("user_email"):
             comments = request.form.get('textarea')
             rating = request.form.get('star')
@@ -188,7 +188,7 @@ def bookpage(isbn) :
         else:
             flash("You cannot view this page unless you login!")
             return redirect(url_for("login"))
-            
+
     elif request.method == "GET":
         # print("you are in the get method")
         if session.get('user_email') is  None:
@@ -201,7 +201,77 @@ def bookpage(isbn) :
             book_details = Book.query.get(isbn)
             existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
             return render_template("bookpage.html",details = existing_reviews , book = book_details)
-    
+
+
+@app.route("/api/submit_review",methods=["GET","POST"])
+def submit_review():
+   # the user has given email, isbn and the review in the url . Now i have to get it.
+    try:
+        if (not request.is_json) :
+            return jsonify({"error" : "not a json request"}), 400
+
+        reqData = request.get_json()
+
+        if( "isbn" not in reqData):
+            return jsonify({"error" : "invalid param key"}), 400
+        # email or session["email"]
+        if("email" not in reqData):
+            return jsonify({"error" : "invalid email"}), 400
+        #render login page other wise
+
+        if("comment" not in reqData):
+            return jsonify({"error" : "no reviews given "}), 400
+
+        if("rating" not in reqData):
+            return jsonify({"error" : "no rating given"}), 400
+
+        isbn = reqData.get("isbn")
+        if len(isbn)!=10 :
+            remain=10-len(isbn)
+            zeros="0"*remain
+            isbn=zeros+isbn
+
+        book = Book.query.get(isbn)
+
+        if book is None:
+            return jsonify({"error" : "Invalid book isbn"}), 400
+
+        email = reqData.get("email")
+        review_data = Reviews.query.filter(and_(Reviews.isbn == isbn ,Reviews.emailid == email )).first()
+
+        if review_data is not  None:
+            return jsonify({"error" : "You already gave a review "}), 400
+        if(review_data is None):
+            comment = reqData.get("comment")
+
+        rating = reqData.get("rating")
+        # now add the review to the database
+
+        reviewobj = Reviews(isbn = isbn,emailid=session['user_email'],rating=rating,comments=comment)
+        db.session.add(reviewobj)
+        db.session.commit()
+
+   # now get all the reviews that are there on that isbn
+
+        # existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
+        # results =[]
+        # for review in existing_reviews :
+        #     temp = {}
+        #     temp["isbn"] = review.isbn
+        #     temp["email"] = review.emailid
+        #     temp["comments"] = review.comments
+        #     temp["rating"] = review.rating
+        #     results.append(temp)
+
+        # will just add the new review to the top of the comment section
+
+        return jsonify({"email":email,"comment":comment,"rating":rating}) , 200
+
+    except Exception as exe:
+        print(exe)
+        return jsonify({"error": "Server Error"}),500
+
+
 @app.route("/admin")
 def admin() :
     if session.get("user_email") :
