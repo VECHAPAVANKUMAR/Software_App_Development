@@ -251,19 +251,7 @@ def submit_review():
         db.session.add(reviewobj)
         db.session.commit()
 
-   # now get all the reviews that are there on that isbn
 
-        # existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-        # results =[]
-        # for review in existing_reviews :
-        #     temp = {}
-        #     temp["isbn"] = review.isbn
-        #     temp["email"] = review.emailid
-        #     temp["comments"] = review.comments
-        #     temp["rating"] = review.rating
-        #     results.append(temp)
-
-        # will just add the new review to the top of the comment section
 
         return jsonify({"email":email,"comment":comment,"rating":rating}) , 200
 
