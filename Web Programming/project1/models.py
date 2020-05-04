@@ -44,7 +44,6 @@ class Book(db.Model) :
 
         return "ISBN : " + self.isbn + " | Title : " + self.title + " | Author : " + self.author + " | Year : " + self.year
 
-
 class Reviews(db.Model):
     isbn = db.Column(db.String ,ForeignKey("books.isbn"), primary_key=True)
     emailid = db.Column(db.String ,ForeignKey("users.email"), primary_key=True)

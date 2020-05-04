@@ -1,11 +1,6 @@
 import hashlib, binascii, os
 
-import json
 from flask import Flask, session, request, render_template, flash, redirect, url_for, jsonify
-
-
-from flask import Flask, session, request, render_template, flash, redirect, url_for
-
 from flask_session import Session
 from sqlalchemy.orm import scoped_session, sessionmaker
 from models import *
@@ -126,7 +121,6 @@ def logout() :
         flash("Please Login", "info")
         return redirect("login")
 
-
 @app.route("/search", methods=["GET", "POST"])
 def search() :
 
@@ -139,10 +133,6 @@ def search() :
             flash("Pleae Login", "info")
             return redirect("/login")
 
-@app.route("/results", methods=["GET", "POST"])
-def results() :
-
-
     if request.method == "POST" :
 
         if session.get("user_email") :
@@ -152,23 +142,14 @@ def results() :
             session["query"] = query
             try :
                 books[0].isbn
-
                 return render_template("userHome.html", books=books)
             except Exception :
                 flash("No Results Found")
                 return render_template("userHome.html", books=books)
-
-                return render_template("results.html", books=books)
-            except Exception as exc :
-                flash("No Results Found")
-                return render_template("results.html", books=books)
-
         else :
             flash("Please Login", "info")
             return redirect(url_for("login"))
-
     else :
-
 
         if session.get("user_email") :
             query = session.get("query")
@@ -177,8 +158,7 @@ def results() :
         else :
             flash("Please Login", "info")
             return redirect(url_for("login"))
-
-
+    
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def bookpage(isbn) :
 
@@ -295,68 +275,120 @@ def bookdetails():
         return jsonify({"error": "Server Error"}),500
 
 
-        if session.get("user_email") :
-            query = session.get("query")
-            books = Book.query.filter(or_(Book.isbn.like(query), Book.title.like(query), Book.author.like(query), Book.year.like(query)))
-            return render_template("results.html", books=books)
-        else :
-            flash("Please Login", "info")
-            return redirect(url_for("login"))
-
-
-@app.route("/search", methods=["GET"])
-def search() :
+@app.route("/api/search", methods=["POST"])
+def searchAPI() :
     
-    if request.method == "GET" :
-    
-        if session.get("user_email") :
-            return render_template("search.html")
-        else :
-            flash("Pleae Login", "info")
-            return redirect("/login")
+    try :
+
+        if (not request.is_json) :
+            return jsonify({"error" : "not a json request"}), 400
+
+        reqData = request.get_json()
+
+        if "search" not in reqData:
+            return jsonify({"error" : "missing search param"}), 400
+            
+        value = reqData.get("search")
+
+        if len(value) == 0 :
+            return jsonify({"error" : "no results found"}), 404
+
+        if "email" not in reqData :
+            return jsonify({"error" : "missing key email"}), 400
+
+        email = reqData.get("email")
+
+        validEMail = User.query.get(email)
+
+        if validEMail is None :
+            return jsonify({"error" : "not a registered email"}), 200
+        
+        query = "%{}%".format(value)
+
+        books = Book.query.filter(or_(Book.isbn.ilike(query), Book.title.ilike(query), Book.author.ilike(query), Book.year.like(query)))
+
+        try :
+
+            books[0].isbn
+
+            results = []
+
+            for book in books :
+
+                temp = {}
+
+                temp["isbn"] = book.isbn
+                temp["title"] = book.title
+                temp["author"] = book.author
+                temp["year"] = book.isbn
+
+                results.append(temp)
+
+            return jsonify({"books" : results}), 200
+
+        except Exception as exc :
+
+            return jsonify({"error" : "no results found"}), 404
+
+    except Exception :
+        return jsonify({"error" : "Server Error"}), 500
   
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
 def bookpage(isbn) :
+
     if request.method == "POST":
-        # we have to check whether the user is logged in here also because he might give the rating, comments in the url itself 
+
         if session.get("user_email"):
+
             comments = request.form.get('textarea')
             rating = request.form.get('star')
-            print(comments)
-            print(rating)
-            #now check if the reviewer has already commented
+
             if rating is None:
                 rating=0
             review_data = Reviews.query.filter(and_(Reviews.isbn == isbn ,Reviews.emailid == session.get("user_email"))).first()
+
             if review_data is None:
+
                 reviewobj = Reviews(isbn = isbn,emailid=session.get('user_email'),rating=rating,comments=comments)
                 db.session.add(reviewobj)
                 db.session.commit()
                 print("inserted into db")
                 existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
                 book_details = Book.query.get(isbn)
+
                 return render_template("bookpage.html",details = existing_reviews , book = book_details)
+
             else:
+
                 flash("You already reviewed this book  !")
                 existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
                 book_details = Book.query.get(isbn)
+
                 return render_template("bookpage.html",details = existing_reviews , book = book_details)
         else:
+
             flash("You cannot view this page unless you login!")
             return redirect(url_for("login"))
             
     elif request.method == "GET":
-        # print("you are in the get method")
+
         if session.get('user_email') is  None:
+
             flash("You cannot view this page unless you login!")
             return redirect(url_for("login"))
+
         else:
+
             review_data = Reviews.query.filter(and_(Reviews.isbn == isbn ,Reviews.emailid == session.get("user_email"))).first()
+
             if review_data is not None:
+
                  flash("You already reviewed this book !")
+
             book_details = Book.query.get(isbn)
             existing_reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
-            return render_template("bookpage.html",details = existing_reviews , book = book_details)
+
+            return render_template("bookpage.html", details=existing_reviews , book=book_details)
     
 @app.route("/admin")
 def admin() :
