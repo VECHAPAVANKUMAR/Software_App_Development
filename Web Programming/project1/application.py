@@ -30,11 +30,11 @@ def profile() :
 
     if request.method == "POST" :
 
-        name = request.form.get("name").trim()
+        name = request.form.get("name")
 
-        emailID = request.form.get("emailID").trim()
+        emailID = request.form.get("emailID")
 
-        password = request.form.get("pwd").trim()
+        password = request.form.get("pwd")
 
         dateOfBirth = request.form.get("dob")
 
@@ -183,10 +183,10 @@ def searchAPI() :
 
         email = reqData.get("email")
 
-        validEMail = User.query.get(email)
+        isEmailExists = User.query.get(email)
 
-        if validEMail is None :
-            return jsonify({"error" : "not a registered email"}), 200
+        if isEmailExists is None :
+            return jsonify({"error" : "not a registered email"}), 401
         
         query = "%{}%".format(value)
 
@@ -215,7 +215,8 @@ def searchAPI() :
 
             return jsonify({"error" : "no results found"}), 404
 
-    except Exception :
+    except Exception as exc:
+        print(exc)
         return jsonify({"error" : "Server Error"}), 500
   
 @app.route("/book/<string:isbn>", methods=["GET", "POST"])
@@ -275,6 +276,133 @@ def bookpage(isbn) :
 
             return render_template("bookpage.html", details=existing_reviews , book=book_details)
     
+@app.route("/api/book" , methods=["POST"])
+def bookdetails():
+    
+    try:
+        
+        if (not request.is_json) :
+            return jsonify({"error" : "not a json request"}), 400
+    
+        reqData = request.get_json()
+
+        if "isbn" not in reqData:
+            return jsonify({"error" : "missing isbn param"}), 400
+
+        if "email" not in reqData :
+            return jsonify({"error" : "missing email"}), 400
+
+        isbn = reqData.get("isbn")
+
+        book = Book.query.get(isbn)
+
+        if book is None :
+            return jsonify({"error" : "invalid isbn"})
+
+        email = reqData.get("email")
+
+        validEmail = User.query.get(email)
+
+        if validEmail is None :
+            return jsonify({"error" : "not a registered email"}), 401
+    
+        book_details = {"isbn" : book.isbn, "title" : book.title, "author" : book.author, "year" : book.year}
+
+        reviews = Reviews.query.filter_by(isbn=isbn).order_by(Reviews.timestamp.desc()).all()
+
+        reviewlist = []
+
+        for review in reviews:
+
+            temp1={}
+            temp1["isbn"] = review.isbn
+            temp1["emailid"] = review.emailid
+            temp1["rating"] = review.rating
+            temp1["comments"] = review.comments
+
+            reviewlist.append(temp1)
+
+        return jsonify({"book": book_details ,"reviews":reviewlist}), 200
+        
+    except Exception as exe:
+        print(exe)
+        return jsonify({"error": "Server Error"}),500
+
+@app.route("/api/submit_review", methods=["POST"])
+def submit_review():
+
+    try:
+
+        if (not request.is_json) :
+            return jsonify({"error" : "not a json request"}), 400
+
+        reqData = request.get_json()
+
+        if "isbn" not in reqData :
+            return jsonify({"error" : "invalid param key"}), 400
+
+        if "email" not in reqData :
+            return jsonify({"error" : "invalid email"}), 400
+
+        if "comment" not in reqData :
+            return jsonify({"error" : "no reviews given "}), 400
+
+        if "rating" not in reqData :
+            return jsonify({"error" : "no rating given"}), 400
+
+        isbn = reqData.get("isbn")
+        
+        book = Book.query.get(isbn)
+
+        if book is None:
+            return jsonify({"error" : "Invalid book isbn"}), 400
+
+        email = reqData.get("email")
+
+        isValidEmail = User.query.get(email)
+
+        if isValidEmail is None :
+            return jsonify({"error" : "not a registered email"}), 401
+
+        review_data = Reviews.query.filter(and_(Reviews.isbn == isbn, Reviews.emailid == email)).first()
+
+        if review_data :
+            return jsonify({"error" : "You already gave a review "}), 400
+
+        comment = reqData.get("comment")
+
+        if len(comment) == 0 :
+            return jsonify({"error" : "review message cannot be empty"})
+
+        rating = reqData.get("rating")
+
+        if int(rating) > 5 or int(rating) < 0 :
+            return jsonify({"error" : "rating should be in between 1 and 5"})
+
+        reviewobj = Reviews(isbn=isbn, emailid=email, rating=rating, comments=comment)
+        db.session.add(reviewobj)
+        db.session.commit()
+
+        reviews = Reviews.query.filter_by(isbn =isbn).order_by(Reviews.timestamp.desc()).all()
+        results = []
+        
+        for review in reviews :
+
+            temp = {}
+
+            temp["isbn"] = review.isbn
+            temp["email"] = review.emailid
+            temp["comments"] = review.comments
+            temp["rating"] = review.rating
+            
+            results.append(temp)
+
+        return jsonify({"reviews" : results}) , 200
+
+    except Exception as exe:
+        print(exe)
+        return jsonify({"error": "Server Error"}), 500
+
 @app.route("/admin")
 def admin() :
     if session.get("user_email") :
