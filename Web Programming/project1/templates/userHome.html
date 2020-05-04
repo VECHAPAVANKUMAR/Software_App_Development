@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <title>Home</title>
     <style>
+      
         .input-group-prepend {
             width: 100%;
             font-size: medium;
@@ -23,7 +24,7 @@
         }
 
     </style>
- 
+
     <script>
         
         const email = "{{email}}"
@@ -193,8 +194,41 @@
             return false;
         }
 
+        function submit_review(isbn)
+        {
+            const request = new XMLHttpRequest();
+            request.open('POST',"/api/submit_review");
+            request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            request.onload = () =>{
+            var response=JSON.parse(request.responseText);
+            if (response.hasOwnProperty("error")){
+                    var content = `<p style= "color:red;">${response.error}</p>`
+                    document.querySelector('#load').innerHTML += content
+            }
+            else
+            {
+                var content = `<p>Email : ${response.email}</p>
+                    <p>Rating : ${response.rating} </p>
+                    <p>Review : ${response.comment} </p><br><br>`;
+                document.querySelector('#load').innerHTML += content
+            }
+
+
+        }
+            var value = document.querySelector("#comment").value
+            var ele = document.getElementsByName('star');
+            // check for the element in the rating that is checked
+            var rating = ""
+            for(i = 0; i < ele.length; i++) {
+                if(ele[i].checked){rating=ele[i].value;}
+            }
+            var jsonData = JSON.stringify({"isbn":isbn.toString(),"comment" : value,"rating" : rating , "email":email})
+            request.send(jsonData);
+            return false;
+
   </script>
-</head>
+
+  </head>
 <header>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
         <a class="navbar-brand" href="/index">Book Reviews</a>
@@ -214,13 +248,13 @@
         </div>
     </nav>
 </header>
- 
+<body>
+
 <body>
  
     {% with messages = get_flashed_messages() %} 
     {% if messages %}
         {% for msg in messages %}
- 
             <div class="alert alert-warning alert-dismissible fade show" role="alert" id="pop">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -238,8 +272,8 @@
     
     <span id="email" value={{email}}></span>
     <div class="container">
- 
-        <div class="row" style="margin-top: 5%;">
+      
+         <div class="row" style="margin-top: 5%;">
             
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
  
