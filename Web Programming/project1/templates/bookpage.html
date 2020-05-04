@@ -78,27 +78,8 @@
     </style>
 <head>
     <title>Bookpage</title>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
-      <a class="navbar-brand" href="/">Book Reviews</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                  <a class="nav-link" href="/">Home</a>
-              </li>
-              <li class="nav-item active">
-                  <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/logout">Logout</a>
-              </li>
-          </ul>
-      </div>
-  </nav>
 </head>
+
 <body>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -167,7 +148,7 @@
           <br><br>
           <div class="mb-3">
             <label for="validationTextarea" style="color: white;font-size:larger;">Comment</label>
-            <textarea class="form-control is-invalid" name= "textarea" id="validationTextarea" placeholder="Required example textarea" required></textarea>
+            <textarea class="form-control is-invalid" name= "textarea" id="validationTextarea" placeholder="Please review here..." required></textarea>
               <br>
             <button type="submit" class="btn btn-primary btn-lg">Submit</button>
           </div>

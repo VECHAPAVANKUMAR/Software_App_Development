@@ -29,7 +29,7 @@
         }
 
         #review {
-            background:#ffe7a6;
+            background: #ffe7a6;
             position: relative;
             border-radius: 10px;
             padding: 2px 8px 2px 8px;
@@ -98,25 +98,29 @@
                         <p class="h6"><b>Author : </b> {{ book.author }} </p> <br>
                         <p class="h6"><b>Year : </b> {{ book.year }} </p> <br>
                     </div>
+
+                    {% if flag %}
+
                     <div class="input-group mb-3">
 
                         <div class="input-group-prepend">
                             <textarea name="message" id="" cols="50" rows="4"
-                                placeholder="  Coment publicly" 
-                                required></textarea>
+                                placeholder="Hai {{ name }} 
+Add a public comment..." 
+                                required style="padding-left: 8px;"></textarea>
                         </div>
 
                     </div>
-
 
                     <div>
                         <button type="submit" class="btn btn-primary"
                             style="width: 150px; margin-left: 8px;">Submit</button>
                     </div>
 
+                    {% endif %}
+
                 </form>
-                
-                <!-- <br> -->
+
 
                 {% for review in reviews %}
                 <div id="review">
