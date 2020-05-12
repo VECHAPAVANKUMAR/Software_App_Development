@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <title>Title</title>
+    
+    <style>
+
+        .input-group-prepend {
+            width: 100%;
+            padding-left: 10px;
+            font-size: medium;
+        }
+
+        label {
+
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: large;
+            padding-top: 10px;
+            padding-left: 8px;
+        }
+
+        #display div {
+            
+            width : 100%;
+            border: solid 1px black ;
+            margin: 5px 5px 5px 5px;
+            padding: 5px 5px 5px 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+    
+</head>
+
+<body>
+
+    <div class="container">
+ 
+        <div class="row" style="margin-top: 5%;">
+            
+            
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
+            
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+
+                <label for="task name">TODO</label>
+
+                <div class="input-group mb-3">
+
+                    <div class="input-group-prepend">
+
+                        <input type="text" placeholder="TODO" id="todo" class="form-control"
+                            aria-label="Username" aria-describedby="basic-addon1" required>
+
+                        <button type="submit" class="btn btn-primary" style="width: 150px; margin-left: 5px;" onclick="addTask()">ADD</button>
+                    
+                    </div>
+
+                </div>
+                
+                <p style="text-align: center;" id="load"><b>no tasks so far</b></p>
+
+            </div>
+
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+
+        </div>
+
+       <div class="row" style="margin-top: 5%;">
+            
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"></div>
+            
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" id="display">
+
+            </div>
+
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="./todolist.js"></script>
+    
+</body>
+
+</html>
