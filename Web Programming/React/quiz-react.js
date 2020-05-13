@@ -1,26 +1,3 @@
-class Instructions extends React.Component {
-
-    render() {
-
-        return (
-
-            <div>
-                <p>Instruction 1 Instruction 1 Instruction 1 Instruction 1</p>
-                <p>Instruction 2 Instruction 2 Instruction 2 Instruction 2</p>
-                <p>Instruction 3 Instruction 3 Instruction 3 Instruction 3</p>
-                <p>Instruction 4 Instruction 4 Instruction 4 Instruction 4</p>
-                <p>Instruction 5 Instruction 5 Instruction 5 Instruction 5</p>
-                <p>Instruction 6 Instruction 6 Instruction 6 Instruction 6</p>
-                <p>Instruction 7 Instruction 7 Instruction 7 Instruction 7</p>
-                <p>Instruction 8 Instruction 8 Instruction 8 Instruction 8</p>
-                <p>Instruction 9 Instruction 9 Instruction 9 Instruction 9</p>
-                <p>Instruction 10 Instruction 10 Instruction 10 Instruction 10</p>
-            </div>
-
-        )
-    }
-}
-
 class Question extends React.Component {
 
     render() {
@@ -38,6 +15,7 @@ class Question extends React.Component {
                         onChange={this.props.handleChange} data-index = {i}/>{option}
                     </div>  
                 )}
+                
             </div>
         )
     }
@@ -124,7 +102,35 @@ class Quiz extends React.Component {
             }
 
             return (
-                <h1>You have scored {score} out of {this.state.data.length}</h1>
+
+                <div>
+
+                    {this.state.data.map((ques, index) => {
+
+                        return (
+
+                            <div>
+
+                                <p> {index + 1}. {ques.question} </p>
+
+                                <p>
+                                    {ques.options.map((opt, idx) => {
+                                        return (<span> <b> {idx + 1} </b> : {opt} </span>)
+                                    })}
+                                </p>
+
+                                <p> Correct Option : {parseInt(ques.correctOptionIdx) + 1} </p>
+
+                                <p> Option Choosed : {ques.choosedOptionIdx == -1 ? "No": parseInt(ques.choosedOptionIdx) + 1} </p>
+
+                            </div>
+
+                        )
+                    })}
+
+                    <h1>You have scored {score} out of {this.state.data.length}</h1>
+
+                </div>
             )
         }
     }
@@ -204,6 +210,29 @@ class Quiz extends React.Component {
                 nextDisable : true
             })
         }
+    }
+}
+
+class Instructions extends React.Component {
+
+    render() {
+
+        return (
+
+            <div>
+                <p>Instruction 1 Instruction 1 Instruction 1 Instruction 1</p>
+                <p>Instruction 2 Instruction 2 Instruction 2 Instruction 2</p>
+                <p>Instruction 3 Instruction 3 Instruction 3 Instruction 3</p>
+                <p>Instruction 4 Instruction 4 Instruction 4 Instruction 4</p>
+                <p>Instruction 5 Instruction 5 Instruction 5 Instruction 5</p>
+                <p>Instruction 6 Instruction 6 Instruction 6 Instruction 6</p>
+                <p>Instruction 7 Instruction 7 Instruction 7 Instruction 7</p>
+                <p>Instruction 8 Instruction 8 Instruction 8 Instruction 8</p>
+                <p>Instruction 9 Instruction 9 Instruction 9 Instruction 9</p>
+                <p>Instruction 10 Instruction 10 Instruction 10 Instruction 10</p>
+            </div>
+
+        )
     }
 }
 
