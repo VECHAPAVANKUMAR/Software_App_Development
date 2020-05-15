@@ -4,7 +4,7 @@ class Form extends React.Component {
         super(props)
         this.state = {
             taskInput : "",
-            dueDate : ""
+            dueDate : "",
         }
         this.handleSubmit = this.handleSubmit.bind(this)
     }
@@ -66,7 +66,7 @@ class Task extends React.Component {
     constructor(props) {
         super(props) 
         this.state =  {
-            taskList : []
+            taskList : [],
         }
 
         this.addTask = this.addTask.bind(this)
@@ -83,8 +83,10 @@ class Task extends React.Component {
                 <ul>
                     {this.state.taskList.map((task, i) =>
                         <li key={i}>
-                            {task.task} {task.dueDate}
+                            {task.marked ? <span className="marked">{task.task} {task.dueDate}</span> :
+                                            <span>{task.task} {task.dueDate}</span>}
                             <button data-index = {i} onClick={this.deleteTask}> Delete Task </button>
+                            <input type="checkbox" data-index={i} checked={task.marked} onChange = {this.markTask}/>
                         </li>
                     )}
                 </ul>
@@ -113,7 +115,7 @@ class Task extends React.Component {
     addTask = (task, dueDate) => {
 
         this.setState(state => ({
-        taskList: [...state.taskList, {task : task, dueDate : dueDate}]
+            taskList: [...state.taskList, {task : task, dueDate : dueDate, marked: false}]
         }));
     }
 
@@ -125,11 +127,21 @@ class Task extends React.Component {
             const tasks = [...state.taskList];
             tasks.splice(index, 1);
             return {
-                taskList: tasks
+                taskList: tasks,
             };
         });
     }   
 
+    markTask = (event) => {
+        const index = event.target.dataset.index;
+        this.setState(state => {
+            const tasks = [...state.taskList];
+            tasks[index].marked = !tasks[index].marked;
+            return {
+                taskList : tasks,
+            };
+        });
+    }
 }
 
 class App extends React.Component {
@@ -145,6 +157,5 @@ class App extends React.Component {
 
     }
 }
-
 
 ReactDOM.render(<App />, document.querySelector("#root"));
