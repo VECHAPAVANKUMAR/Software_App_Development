@@ -2,7 +2,7 @@ class Question extends React.Component {
 
     render() {
 
-        return (                    
+        return ( 
 
             <div>
 
