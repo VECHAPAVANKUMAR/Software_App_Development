@@ -10,7 +10,7 @@ class Question extends React.Component {
 
                 {this.props.options.map((option, i) =>
 
-                    <div key={i}>                                    
+                    <div key={i}>                                                                      
                         <input type="radio" name="options" value={option} onClick={this.props.handleChange}/>{option}
                     </div>  
 
