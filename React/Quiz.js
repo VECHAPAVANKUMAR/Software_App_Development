@@ -10,13 +10,13 @@ class Question extends React.Component {
 
                 {this.props.options.map((option, i) =>
 
-                    <div key={i}>                                                                      
+                    <div key={i}>                                                                                                           
                         <input type="radio" name="options" value={option} onClick={this.props.handleChange}/>{option}
                     </div>  
-
-                )}
+                                                                                                                       
+                )}                       
                                                                                           
-                <br/>
+                <br/>                                                                                         
 
                 <button className="prev" onClick={this.props.previous} disabled={this.props.prevDisable}>Previous</button>
                 <button className="next" onClick={this.props.next} disabled={this.props.nextDisable}>Next</button>
